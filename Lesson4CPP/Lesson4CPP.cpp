@@ -2,6 +2,38 @@
 //
 
 #include <iostream>
+using namespace std;
+
+class Point {
+private:
+    double x;
+    double y;
+public:
+    Point() : Point(0, 0) {}
+    Point(double x, double y)
+    {
+        this->x = x;
+        this->y = y;
+    }
+    friend bool operator==(const Point& point, const Point& point2)
+    {
+        return point.x == point2.x && point.y == point2.y;
+    }
+    Point& operator=(const Point& point)
+    {
+        if (!(this == &point))
+        {
+            this->x = point.x;
+            this->y = point.y;
+        }
+
+        return *this;
+    }
+    void print()
+    {
+        cout << "Точка:" << x << ":" << y << endl;
+    }
+};
 
 class Figure {
 private:
@@ -43,38 +75,46 @@ public:
                 points[i] = figure.points[i];
             }
         }
+        return *this;
     }
     ~Figure() 
     {
         delete[] points;
     }
-};
-class Point {
-private:
-    int x;
-    int y;
-public:
-    Point() : Point(0, 0) {}
-    Point(int x, int y)
+
+    void print() 
     {
-        this->x = x;
-        this->y = y;
-    }
-    friend bool operator==(const Point& point, const Point& point2)
-    {
-        return point.x == point2.x && point.y == point2.y;
-    }
-    Point& operator=(const Point& point)
-    {
-        if(!(this == &point))
-        { 
-            this->x = point.x;
-            this->y = point.y;
+        cout << "Массив на " << size << "элементов" << endl;
+        for (int i = 0; i < size; i++)
+        {
+            
+            points[i].print();
+            
         }
+        cout << "Конец массива" << endl;
+        cout << "" << endl;
     }
 };
 
+
 int main()
 {
-    
+    setlocale(LC_ALL, "");
+    Figure fig(5);
+    fig.print();
+    Figure fig2(10);
+    fig2.print();
+    Figure fig3(5);
+    fig3.print();
+
+    fig = fig3;
+    fig.print();
+    fig = fig2;
+    fig.print();
+    Figure fig4(move(fig));
+    fig4.print();
+    fig = fig4;
+    fig.print();
+
+    return 0;
 }
